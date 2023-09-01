@@ -6,6 +6,8 @@ pip install django
 pip install djangorestframework
 pip install gunicorn
 pip install djoser
+pip install corsheaders
+
 pip install -r requirements.txt
 
 python manage.py collectstatic --no-input
