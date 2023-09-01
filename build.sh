@@ -3,6 +3,7 @@
 set -o errexit  # exit on error
 
 pip install django
+pip install djangorestframework
 pip install gunicorn
 pip install -r requirements.txt
 
