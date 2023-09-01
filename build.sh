@@ -5,6 +5,7 @@ set -o errexit  # exit on error
 pip install django
 pip install djangorestframework
 pip install gunicorn
+pip install djoser
 pip install -r requirements.txt
 
 python manage.py collectstatic --no-input
