@@ -2,8 +2,12 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets, permissions
-from .models import Shop, Item, UserItem, UserWallet
-from .serializers import UserSerializer, GroupSerializer, ItemSerializer, ShopSerializer, UserItemSerializer, RegisterSerializer, BuySerializer, UserWalletSerializer, RandomItemSerializer
+from .models import Shop, Item, UserItem, UserWallet, UserDaily
+from .serializers import UserSerializer, GroupSerializer, ItemSerializer, ShopSerializer, UserItemSerializer, RegisterSerializer, BuySerializer, UserWalletSerializer, RandomItemSerializer, UserDailySerializer
+
+class UserDailyViewSet(viewsets.ModelViewSet):
+    queryset = UserDaily.objects.all()
+    serializer_class = UserDailySerializer
 
 class RandomItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all()

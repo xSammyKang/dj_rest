@@ -1,9 +1,22 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User, Group
 from rest_framework.authtoken.models import Token
-from .models import Shop, Item, UserItem, UserWallet
+from .models import Shop, Item, UserItem, UserWallet, UserDaily
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.decorators import api_view
+from datetime import datetime
+
+class UserDailySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = UserDaily
+        fields = ['id', 'user', 'last_fund', 'last_roll']
+    def update(self, instance, validated_data):
+        if (validated_data.get("last_fund") == "update"):
+            instance.last_fund = datetime.strftime(datetime.now(), '%d%m%y')
+        else:
+            instance.last_roll = datetime.strftime(datetime.now(), '%d%m%y')
+        instance.save()
+        return instance
 
 class RandomItemSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -81,9 +94,11 @@ class RegisterSerializer(serializers.HyperlinkedModelSerializer):
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     inventory = serializers.SerializerMethodField()
     wallet = serializers.SerializerMethodField()
+    daily = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ['url', 'username', 'password', 'email', 'groups', 'inventory', 'wallet']
+        fields = ['url', 'username', 'password', 'email', 'groups', 'inventory', 'wallet', 'daily']
     def get_inventory(self, user):
         all_items = user.useritem_set.all()
         return UserItemSerializer(instance=all_items, many=True, context={'request': self.context.get("request")}).data
@@ -94,6 +109,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             )
         curr_wallet = curr_user.userwallet
         return UserWalletSerializer(instance=[curr_wallet], many=True, context={'request': self.context.get("request")}).data
+    def get_daily(self, curr_user):
+        value = UserDaily.objects.get_or_create(
+            user=curr_user
+        )
+        curr_daily = curr_user.userdaily
+        return UserDailySerializer(instance=[curr_daily], many=True, context={'request': self.context.get("request")}).data
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
