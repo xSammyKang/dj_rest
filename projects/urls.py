@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path, re_path
 from rest_framework import routers
-from .myapi.views import UserViewSet, GroupViewSet, ItemViewSet, ShopViewSet, UserItemViewSet, RegisterViewSet, BuyViewSet, UserWalletViewSet, RandomItemViewSet
+from .myapi.views import UserViewSet, GroupViewSet, ItemViewSet, ShopViewSet, UserItemViewSet, RegisterViewSet, BuyViewSet, UserWalletViewSet, RandomItemViewSet, UserDailyViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -28,6 +28,7 @@ router.register(r'useritems', UserItemViewSet)
 router.register(r'buy', BuyViewSet, basename='buy')
 router.register(r'addfunds', UserWalletViewSet)
 router.register(r'randomitem', RandomItemViewSet, basename='randomitem')
+router.register(r'userdaily', UserDailyViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
